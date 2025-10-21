@@ -550,5 +550,4 @@ function drawHalftone() {
   const adjustedSizes = dotData.map(dot => dot ? dot.size : 0);
   dotData.forEach((dot, index) => {
     if (!dot) return;
-
-    }
+}
