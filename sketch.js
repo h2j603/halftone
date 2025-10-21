@@ -43,7 +43,7 @@ let baseImg; // 원본 기본 이미지
 let patternSVG = null; // SVG 패턴용 별도 이미지
 
 function preload() {
-  baseImg = loadImage('https://media.discordapp.net/attachments/1393571957945143446/1394665202569449554/-01.jpg?ex=6877a2af&is=6876512f&hm=00dad7bd1ea54ba39cdd3db444ec3e1b8d4e6f1c4c4dcb2f3cd6eac4a9c11d14&=&format=webp&width=1022&height=1446'); // 기본 이미지
+  baseImg = loadImage('https://d2w9rnfcy7mm78.cloudfront.net/37945145/original_149aef3cb23d4d0a495f19326c665581.jpg?1751961646?bc=0'); // 기본 이미지
 }
 
 function setup() {
