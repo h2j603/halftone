@@ -1,5 +1,6 @@
-// HTML 파일의 <script>에 반드시 p5.js-svg 라이브러리를 추가해야 함!
-// <script src="https://cdn.jsdelivr.net/npm/p5.js-svg@1.1.1/dist/p5.js-svg.min.js"></script>
+// HTML 파일의 <script>에 반드시 p5.js 코어 라이브러리와 p5.js-svg 라이브러리를 추가해야 함!
+// <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script>
+// <script src="https://cdn.jsdelivr.net/npm/p5.js-svg@1.5.1/dist/p5.js-svg.min.js"></script>
 
 let img;
 let tileSize = 30; // 기본 타일 크기
@@ -7,7 +8,7 @@ let previewScale = 0.3; // 화면 미리보기 배율 (0~1). 저장되는 SVG �
 let cnv;
 let scaleSlider;
 let customShape = null; // 타일(도트)로 사용할 SVG 모양
-let maskShape = null;    // 패턴 배치를 위한 마스크 SVG
+let maskShape = null;   // 패턴 배치를 위한 마스크 SVG
 let tileSlider;
 let contrast = 1; // 대비 조정 값 (지수)
 let contrastSlider;
@@ -278,6 +279,11 @@ function handleRasterFile(file) {
         // 캔버스 크기는 변경하지 않음 - 고정
         // UI 위치도 변경하지 않음 - 고정
         
+        // --- !!! 수정된 부분 !!! ---
+        // 픽셀 배열을 읽을 수 있도록 준비
+        img.loadPixels(); 
+        // -------------------------
+        
         redrawHalftone();
       });
     };
@@ -544,37 +550,3 @@ function drawHalftone() {
   const adjustedSizes = dotData.map(dot => dot ? dot.size : 0);
   dotData.forEach((dot, index) => {
     if (!dot) return;
-    
-    let currentSize = dot.size;
-    
-    // 주변 도트들과의 거리 확인
-    dotData.forEach((otherDot, otherIndex) => {
-      if (index === otherIndex || !otherDot) return;
-      
-      const distance = dist(dot.x, dot.y, otherDot.x, otherDot.y);
-      const minDistance = (currentSize + otherDot.size) / 2;
-      
-      if (distance < minDistance && distance > 0) {
-        const maxAllowedSize = Math.max(minDotSize, (distance * 2) - otherDot.size/2);
-        currentSize = Math.min(currentSize, maxAllowedSize);
-      }
-    });
-    
-    adjustedSizes[index] = currentSize;
-  });
-
-  // 조정된 크기로 도트 그리기
-  dotData.forEach((dot, index) => {
-    if (!dot) return;
-    
-    const s = adjustedSizes[index];
-    if (s <= 0) return;
-
-    const shapeImg = pickShape(dot.brightness);
-    if (shapeImg) {
-      image(shapeImg, dot.x - s / 2, dot.y - s / 2, s, s);
-    } else {
-      ellipse(dot.x, dot.y, s, s);
-    }
-  });
-}
